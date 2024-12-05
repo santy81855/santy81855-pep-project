@@ -4,6 +4,7 @@ import Model.Message;
 import Model.Account;
 import DAO.MessageDAO;
 import DAO.AccountDAO;
+import java.util.List;
 
 public class MessageService {
     private MessageDAO messageDAO;
@@ -39,6 +40,13 @@ public class MessageService {
         }
         // create message
         return this.messageDAO.insertMessage(message);
+    }
+
+    /*
+     * Method retrieves all messages in the database.
+     */
+    public List<Message> getAllMessages() {
+        return this.messageDAO.getAllMessages();
     }
     
 }

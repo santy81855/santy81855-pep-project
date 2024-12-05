@@ -8,6 +8,7 @@ import Model.Account;
 import Model.Message;
 import Service.AccountService;
 import Service.MessageService;
+import java.util.List;
 
 /**
  * TODO: You will need to write your own endpoints and handlers for your controller. The endpoints you will need can be
@@ -33,7 +34,8 @@ public class SocialMediaController {
         app.get("example-endpoint", this::exampleHandler);
         app.post("/register", this::postRegisterHandler);
         app.post("/login", this::postLoginHandler);
-        app.post("/messages", this::postMessage);
+        app.post("/messages", this::postMessageHandler);
+        app.get("/messages", this::getAllMessagesHandler);
 
         return app;
     }
@@ -46,7 +48,13 @@ public class SocialMediaController {
         context.json("sample text");
     }
 
-    private void postMessage(Context ctx) throws JsonProcessingException {
+    private void getAllMessagesHandler(Context ctx) {
+        List<Message> messageList = messageService.getAllMessages();
+        ctx.json(messageList);
+        ctx.status(200);
+    }
+
+    private void postMessageHandler(Context ctx) throws JsonProcessingException {
         ObjectMapper om = new ObjectMapper();
         Message message = om.readValue(ctx.body(), Message.class);
         Message insertedMessage = messageService.createMessage(message);

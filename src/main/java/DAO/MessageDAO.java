@@ -35,4 +35,25 @@ public class MessageDAO {
         }
         return null;
     }
+
+    /*
+     * Method to retrieve all Messages from the database. It will return a list of Message objects the size of the amount of messages in the database. The list will be empty if there are no messages in the database.
+     */
+    public List<Message> getAllMessages() {
+        Connection conn = ConnectionUtil.getConnection();
+        List<Message> messageList = new ArrayList<>();
+        try{
+            String sql = "SELECT * FROM message";
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ResultSet rs = ps.executeQuery();
+            while(rs.next()) {
+                Message newMessage =
+                    new Message(rs.getInt("message_id"), rs.getInt("posted_by"), rs.getString("message_text"), rs.getLong("time_posted_epoch"));
+                messageList.add(newMessage);
+            }
+        } catch(SQLException e) {
+            System.out.println(e.getMessage());
+        }
+        return messageList;
+    }
 }
